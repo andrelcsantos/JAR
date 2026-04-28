@@ -1,29 +1,21 @@
 package school.sptech;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.util.List;
+import school.sptech.service.ExcelBasico;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class Main {
     public static void main(String[] args) {
+        String caminho = "/home/andre/Downloads/br_mdr_snis_municipio_agua_esgoto-KPIsCLAU.csv.xlsx";
 
-        Conexao conexao = new Conexao();
-        JdbcTemplate template = new JdbcTemplate(conexao.getConexao());
-
-        template.execute("DROP TABLE IF EXISTS PESSOA");
-
-        template.execute("CREATE TABLE PESSOA" + "(id int primary key auto_increment, nome varchar(50), data_nascimento DATE, isAdmin bit)");
-
-        template.update("INSERT INTO PESSOA VALUES(DEFAULT, ?, ?, ?)","Pedro", "2023-08-19", 0);
-
-        List<Pessoa> pessoas = template.query("SELECT * FROM PESSOA", new BeanPropertyRowMapper<>(Pessoa.class));
-
-        System.out.println(pessoas);
-
-        System.out.println("UPDATE");
-        template.update("UPDATE PESSOA SET nome = ? WHERE id = ?", "Claudio", 1);
-        pessoas = template.query("SELECT * FROM PESSOA", new BeanPropertyRowMapper<>(Pessoa.class));
-        System.out.println(pessoas);
+        try (InputStream arquivo = new FileInputStream(caminho)) {
+            Conexao conexao = new Conexao();
+            ExcelBasico service = new ExcelBasico(conexao.getConexao());
+            service.processar(arquivo);
+            System.out.println("Tudo concluído!");
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
