@@ -5,7 +5,11 @@ public class MunicipioBasico {
     private Integer idMunicipio;
     private String siglaUf;
 
-    public MunicipioBasico(){}
+    public MunicipioBasico(Integer ano, Integer idMunicipio, String siglaUf){
+        this.ano = ano;
+        this.idMunicipio = idMunicipio;
+        this.siglaUf = siglaUf;
+    }
 
     public Integer getAno() {
         return ano;
@@ -29,5 +33,14 @@ public class MunicipioBasico {
 
     public void setSiglaUf(String siglaUf) {
         this.siglaUf = siglaUf;
+    }
+
+    @Override
+    public String toString() {
+        return "MunicipioBasico{" +
+                "ano=" + ano +
+                ", idMunicipio=" + idMunicipio +
+                ", siglaUf='" + siglaUf + '\'' +
+                '}';
     }
 }

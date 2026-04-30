@@ -1,14 +1,17 @@
 package school.sptech.service;
 
-import org.apache.poi.util.IOUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.util.IOUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import school.sptech.model.MunicipioBasico;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
+import java.util.*;
 
 public class ExcelBasico {
     private final JdbcTemplate jdbc;
+    private List<MunicipioBasico> municipios = new ArrayList<>();
 
     public ExcelBasico(DataSource dataSource) {
         this.jdbc = new JdbcTemplate(dataSource);
@@ -21,6 +24,11 @@ public class ExcelBasico {
         System.out.println("Tabela 'municipio_basico' pronta.");
     }
 
+    private void salvarLote() {
+        String sql = "INSERT INTO municipio_basico (ano, id_municipio, sigla_uf) VALUES (?, ?, ?)";
+    }
+
+
     public void processar(InputStream inputStream) throws Exception {
         IOUtils.setByteArrayMaxOverride(500_000_000);
 
@@ -29,17 +37,30 @@ public class ExcelBasico {
             Sheet sheet = workbook.getSheetAt(0);
 
             int totalLinhas = sheet.getLastRowNum();
+            int tamanhoLote = 500;
             int inseridos = 0;
+            Map<String, Integer> mapearHeard = new HashMap<>();
 
-            for (int i = 1; i <= totalLinhas; i++) {
+
+            for (int i = 0; i <= 3; i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) continue;
-                Cell celulaAno = row.getCell(0);
-                Cell celulaId  = row.getCell(1);
-                Cell celulaUf  = row.getCell(2);
+                if (i == 0) {
+                    Iterator<Cell> cellIterator = row.cellIterator();
+                    while (cellIterator.hasNext()) {
+                        Cell cell = cellIterator.next();
+                        cell.setCellType(CellType.STRING);
+                        String nomeColuna = cell.getStringCellValue();
+                        mapearHeard.put(nomeColuna, cell.getColumnIndex());
+                        System.out.println(nomeColuna);
+                    }
+                    continue;
+                }
+                Cell celulaAno = row.getCell(mapearHeard.get("ano"));
+                Cell celulaId = row.getCell(mapearHeard.get("id_municipio"));
+                Cell celulaUf = row.getCell(mapearHeard.get("sigla_uf"));
 
                 if (celulaAno == null) continue;
-
                 int ano = 0;
                 int idMunicipio = 0;
                 String siglaUf = "";
@@ -61,6 +82,11 @@ public class ExcelBasico {
                 if (celulaUf != null) {
                     siglaUf = celulaUf.getStringCellValue().trim();
                 }
+
+                MunicipioBasico municipio = new MunicipioBasico(ano, idMunicipio, siglaUf);
+                System.out.println(municipio);
+                //municipios.add(municipio);
+
 
                 jdbc.update(
                         "INSERT INTO municipio_basico (ano, id_municipio, sigla_uf) VALUES (?, ?, ?)",
