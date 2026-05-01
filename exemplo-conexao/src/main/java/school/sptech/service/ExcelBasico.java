@@ -1,105 +1,134 @@
 package school.sptech.service;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.IOUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import school.sptech.model.MunicipioBasico;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExcelBasico {
     private final JdbcTemplate jdbc;
-    private List<MunicipioBasico> municipios = new ArrayList<>();
+    private static final int TAMANHO_LOTE = 500;
 
     public ExcelBasico(DataSource dataSource) {
         this.jdbc = new JdbcTemplate(dataSource);
-        jdbc.execute("CREATE TABLE IF NOT EXISTS municipio_basico (" +
+        jdbc.execute("DROP TABLE IF EXISTS municipios");
+        jdbc.execute("CREATE TABLE municipios (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "ano INT, " +
                 "id_municipio INT, " +
-                "sigla_uf VARCHAR(2)" +
+                "sigla_uf VARCHAR(2), " +
+                "populacao_atendida_agua INT, " +
+                "populacao_atendida_esgoto INT, " +
+                "populacao_urbana INT, " +
+                "populacao_urbana_residente_agua INT, " +
+                "populacao_urbana_atendida_agua INT, " +
+                "populacao_urbana_atendida_agua_ibge INT, " +
+                "populacao_urbana_residente_esgoto INT, " +
+                "populacao_urbana_atendida_esgoto INT, " +
+                "populacao_urbana_residente_esgoto_ibge INT" +
                 ")");
-        System.out.println("Tabela 'municipio_basico' pronta.");
+        System.out.println("Tabela criada.");
     }
 
-    private void salvarLote() {
-        String sql = "INSERT INTO municipio_basico (ano, id_municipio, sigla_uf) VALUES (?, ?, ?)";
+    private void salvarLote(List<MunicipioBasico> lote) {
+        String sql = "INSERT INTO municipios (" +
+                "ano, id_municipio, sigla_uf, " +
+                "populacao_atendida_agua, populacao_atendida_esgoto, populacao_urbana, " +
+                "populacao_urbana_residente_agua, populacao_urbana_atendida_agua, populacao_urbana_atendida_agua_ibge, " +
+                "populacao_urbana_residente_esgoto, populacao_urbana_atendida_esgoto, populacao_urbana_residente_esgoto_ibge" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        List<Object[]> parametros = new ArrayList<>();
+        for (MunicipioBasico m : lote) {
+            parametros.add(new Object[]{
+                    m.getAno(), m.getIdMunicipio(), m.getSiglaUf(),
+                    m.getPopulacaoAtendidaAgua(), m.getPopulacaoAtendidaEsgoto(), m.getPopulacaoUrbana(),
+                    m.getPopulacaoUrbanaResidenteAgua(), m.getPopulacaoUrbanaAtendidaAgua(), m.getPopulacaoUrbanaAtendidaAguaIbge(),
+                    m.getPopulacaoUrbanaResidenteEsgoto(), m.getPopulacaoUrbanaAtendidaEsgoto(), m.getPopulacaoUrbanaResidenteEsgotoIbge()
+            });
+        }
+
+        jdbc.batchUpdate(sql, parametros);
     }
 
+    private int lerInteiro(Cell cell) {
+        if (cell == null) return 0;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return (int) cell.getNumericCellValue();
+        }
+        try {
+            return Integer.parseInt(cell.toString().trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
     public void processar(InputStream inputStream) throws Exception {
-        IOUtils.setByteArrayMaxOverride(500_000_000);
 
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
-
             Sheet sheet = workbook.getSheetAt(0);
 
-            int totalLinhas = sheet.getLastRowNum();
-            int tamanhoLote = 500;
+            Map<String, Integer> cabecalho = new HashMap<>();
             int inseridos = 0;
-            Map<String, Integer> mapearHeard = new HashMap<>();
+            List<MunicipioBasico> lote = new ArrayList<>();
 
-
-            for (int i = 0; i <= 3; i++) {
-                Row row = sheet.getRow(i);
-                if (row == null) continue;
-                if (i == 0) {
-                    Iterator<Cell> cellIterator = row.cellIterator();
-                    while (cellIterator.hasNext()) {
-                        Cell cell = cellIterator.next();
-                        cell.setCellType(CellType.STRING);
-                        String nomeColuna = cell.getStringCellValue();
-                        mapearHeard.put(nomeColuna, cell.getColumnIndex());
-                        System.out.println(nomeColuna);
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    for (Cell cell : row) {
+                        cabecalho.put(cell.toString().trim(), cell.getColumnIndex());
                     }
                     continue;
                 }
-                Cell celulaAno = row.getCell(mapearHeard.get("ano"));
-                Cell celulaId = row.getCell(mapearHeard.get("id_municipio"));
-                Cell celulaUf = row.getCell(mapearHeard.get("sigla_uf"));
 
+                Cell celulaAno = row.getCell(cabecalho.get("ano"));
                 if (celulaAno == null) continue;
-                int ano = 0;
-                int idMunicipio = 0;
-                String siglaUf = "";
 
-                if (celulaAno.getCellType() == CellType.NUMERIC) {
-                    ano = (int) celulaAno.getNumericCellValue();
-                } else if (celulaAno.getCellType() == CellType.STRING) {
-                    ano = Integer.parseInt(celulaAno.getStringCellValue().trim());
-                }
+                Cell celulaId = row.getCell(cabecalho.get("id_municipio"));
+                Cell celulaUf = row.getCell(cabecalho.get("sigla_uf"));
+                Cell celulaPAtAgua = row.getCell(cabecalho.get("populacao_atendida_agua"));
+                Cell celulaPAtEsgoto = row.getCell(cabecalho.get("populacao_atendida_esgoto"));
+                Cell celulaPUrbana = row.getCell(cabecalho.get("populacao_urbana"));
+                Cell celulaPUrbResAgua = row.getCell(cabecalho.get("populacao_urbana_residente_agua"));
+                Cell celulaPUrbAtAgua = row.getCell(cabecalho.get("populacao_urbana_atendida_agua"));
+                Cell celulaPUrbAtAguaIbge = row.getCell(cabecalho.get("populacao_urbana_atendida_agua_ibge"));
+                Cell celulaPUrbResEsgoto = row.getCell(cabecalho.get("populacao_urbana_residente_esgoto"));
+                Cell celulaPUrbAtEsgoto = row.getCell(cabecalho.get("populacao_urbana_atendida_esgoto"));
+                Cell celulaPUrbResEsgotoIbge = row.getCell(cabecalho.get("populacao_urbana_residente_esgoto_ibge"));
 
-                if (celulaId != null) {
-                    if (celulaId.getCellType() == CellType.NUMERIC) {
-                        idMunicipio = (int) celulaId.getNumericCellValue();
-                    } else if (celulaId.getCellType() == CellType.STRING) {
-                        idMunicipio = Integer.parseInt(celulaId.getStringCellValue().trim());
-                    }
-                }
+                lote.add(new MunicipioBasico(
+                        lerInteiro(celulaAno),
+                        lerInteiro(celulaId),
+                        celulaUf != null ? celulaUf.toString().trim() : "",
+                        lerInteiro(celulaPAtAgua),
+                        lerInteiro(celulaPAtEsgoto),
+                        lerInteiro(celulaPUrbana),
+                        lerInteiro(celulaPUrbResAgua),
+                        lerInteiro(celulaPUrbAtAgua),
+                        lerInteiro(celulaPUrbAtAguaIbge),
+                        lerInteiro(celulaPUrbResEsgoto),
+                        lerInteiro(celulaPUrbAtEsgoto),
+                        lerInteiro(celulaPUrbResEsgotoIbge)
+                ));
 
-                if (celulaUf != null) {
-                    siglaUf = celulaUf.getStringCellValue().trim();
-                }
-
-                MunicipioBasico municipio = new MunicipioBasico(ano, idMunicipio, siglaUf);
-                System.out.println(municipio);
-                //municipios.add(municipio);
-
-
-                jdbc.update(
-                        "INSERT INTO municipio_basico (ano, id_municipio, sigla_uf) VALUES (?, ?, ?)",
-                        ano, idMunicipio, siglaUf
-                );
-                inseridos++;
-
-                if (i % 500 == 0) {
-                    System.out.println("Processadas " + i + " linhas...");
+                if (lote.size() >= TAMANHO_LOTE) {
+                    salvarLote(lote);
+                    inseridos += lote.size();
+                    System.out.println("Inseridos até agora: " + inseridos + " linhas");
+                    lote.clear();
                 }
             }
 
-            System.out.println("Total de linhas processadas: " + totalLinhas);
+            if (!lote.isEmpty()) {
+                salvarLote(lote);
+                inseridos += lote.size();
+            }
+
             System.out.println("Registros inseridos: " + inseridos);
         }
     }

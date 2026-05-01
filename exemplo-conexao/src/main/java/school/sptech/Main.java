@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 public class Main {
     public static void main(String[] args) {
-        String caminho = "/home/andre/Downloads/br_mdr_snis_municipio_agua_esgoto-KPIsCLAU.csv.xlsx";
+        String caminho = "/home/andre/Downloads/municipio_agua_esgoto.xlsx";
 
         try (InputStream arquivo = new FileInputStream(caminho)) {
             Conexao conexao = new Conexao();

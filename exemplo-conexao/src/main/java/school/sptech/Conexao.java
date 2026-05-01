@@ -1,18 +1,20 @@
 package school.sptech;
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import javax.sql.DataSource;
 
 public class Conexao {
     private DataSource conexao;
 
     public Conexao() {
-        DriverManagerDataSource driver = new DriverManagerDataSource();
-        driver.setUsername("dev_user");
-        driver.setPassword("senha123");
-        driver.setUrl("jdbc:mysql://localhost:3306/exemplo_conexao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-        driver.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        this.conexao = driver;
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl("jdbc:mysql://localhost:3306/exemplo_conexao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        ds.setUsername("dev_user");
+        ds.setPassword("senha123");
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setInitialSize(5);
+        ds.setMaxTotal(10);
+        this.conexao = ds;
     }
 
     public DataSource getConexao() {
