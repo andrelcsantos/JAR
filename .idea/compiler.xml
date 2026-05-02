@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="java-maven" />
-        <module name="inserir-excel-mysql" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="inserir-excel-mysql" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

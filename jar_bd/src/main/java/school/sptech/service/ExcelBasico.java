@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExcelBasico {
+    private static final Logger log = LoggerFactory.getLogger(ExcelBasico.class);
     private final JdbcTemplate jdbc;
     private static final int TAMANHO_LOTE = 500;
 
@@ -33,7 +36,7 @@ public class ExcelBasico {
                 "populacao_urbana_atendida_esgoto INT, " +
                 "populacao_urbana_residente_esgoto_ibge INT" +
                 ")");
-        System.out.println("Tabela criada.");
+        log.info("Tabela criada.");
     }
 
     private void salvarLote(List<Municipio> lote) {
@@ -70,6 +73,7 @@ public class ExcelBasico {
     }
 
     public void processar(InputStream inputStream) throws Exception {
+        log.info("Iniciando leitura da planilha...");
 
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -83,6 +87,7 @@ public class ExcelBasico {
                     for (Cell cell : row) {
                         cabecalho.put(cell.toString().trim(), cell.getColumnIndex());
                     }
+                    log.info("Cabeçalho lido. Colunas: {}", cabecalho.keySet());
                     continue;
                 }
 
@@ -119,7 +124,7 @@ public class ExcelBasico {
                 if (lote.size() >= TAMANHO_LOTE) {
                     salvarLote(lote);
                     inseridos += lote.size();
-                    System.out.println("Inseridos até agora: " + inseridos + " linhas");
+                    log.info("Total de lotes inseridos até agora: {}", inseridos);
                     lote.clear();
                 }
             }
@@ -129,7 +134,7 @@ public class ExcelBasico {
                 inseridos += lote.size();
             }
 
-            System.out.println("Registros inseridos: " + inseridos);
+            log.info("Fim da planilha. Registros inseridos: {}", inseridos);
         }
     }
 }
