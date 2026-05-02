@@ -2,7 +2,7 @@ package school.sptech.service;
 
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-import school.sptech.model.MunicipioBasico;
+import school.sptech.model.Municipio;
 
 import javax.sql.DataSource;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class ExcelBasico {
         System.out.println("Tabela criada.");
     }
 
-    private void salvarLote(List<MunicipioBasico> lote) {
+    private void salvarLote(List<Municipio> lote) {
         String sql = "INSERT INTO municipios (" +
                 "ano, id_municipio, sigla_uf, " +
                 "populacao_atendida_agua, populacao_atendida_esgoto, populacao_urbana, " +
@@ -45,7 +45,7 @@ public class ExcelBasico {
                 ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         List<Object[]> parametros = new ArrayList<>();
-        for (MunicipioBasico m : lote) {
+        for (Municipio m : lote) {
             parametros.add(new Object[]{
                     m.getAno(), m.getIdMunicipio(), m.getSiglaUf(),
                     m.getPopulacaoAtendidaAgua(), m.getPopulacaoAtendidaEsgoto(), m.getPopulacaoUrbana(),
@@ -76,7 +76,7 @@ public class ExcelBasico {
 
             Map<String, Integer> cabecalho = new HashMap<>();
             int inseridos = 0;
-            List<MunicipioBasico> lote = new ArrayList<>();
+            List<Municipio> lote = new ArrayList<>();
 
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) {
@@ -101,7 +101,7 @@ public class ExcelBasico {
                 Cell celulaPUrbAtEsgoto = row.getCell(cabecalho.get("populacao_urbana_atendida_esgoto"));
                 Cell celulaPUrbResEsgotoIbge = row.getCell(cabecalho.get("populacao_urbana_residente_esgoto_ibge"));
 
-                lote.add(new MunicipioBasico(
+                lote.add(new Municipio(
                         lerInteiro(celulaAno),
                         lerInteiro(celulaId),
                         celulaUf != null ? celulaUf.toString().trim() : "",

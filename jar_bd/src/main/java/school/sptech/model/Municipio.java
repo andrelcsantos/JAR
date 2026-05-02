@@ -1,6 +1,6 @@
 package school.sptech.model;
 
-public class MunicipioBasico {
+public class Municipio {
     private Integer ano;
     private Integer idMunicipio;
     private String siglaUf;
@@ -14,12 +14,12 @@ public class MunicipioBasico {
     private Integer populacaoUrbanaAtendidaEsgoto;
     private Integer populacaoUrbanaResidenteEsgotoIbge;
 
-    public MunicipioBasico(Integer ano, Integer idMunicipio, String siglaUf,
-                           Integer populacaoAtendidaAgua, Integer populacaoAtendidaEsgoto,
-                           Integer populacaoUrbana, Integer populacaoUrbanaResidenteAgua,
-                           Integer populacaoUrbanaAtendidaAgua, Integer populacaoUrbanaAtendidaAguaIbge,
-                           Integer populacaoUrbanaResidenteEsgoto, Integer populacaoUrbanaAtendidaEsgoto,
-                           Integer populacaoUrbanaResidenteEsgotoIbge) {
+    public Municipio(Integer ano, Integer idMunicipio, String siglaUf,
+                     Integer populacaoAtendidaAgua, Integer populacaoAtendidaEsgoto,
+                     Integer populacaoUrbana, Integer populacaoUrbanaResidenteAgua,
+                     Integer populacaoUrbanaAtendidaAgua, Integer populacaoUrbanaAtendidaAguaIbge,
+                     Integer populacaoUrbanaResidenteEsgoto, Integer populacaoUrbanaAtendidaEsgoto,
+                     Integer populacaoUrbanaResidenteEsgotoIbge) {
         this.ano = ano;
         this.idMunicipio = idMunicipio;
         this.siglaUf = siglaUf;
