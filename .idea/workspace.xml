@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c9df14ff-5c9b-47cb-a002-eafd396f36b5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/JAR.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/src/main/java/school/sptech/Conexao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/src/main/java/school/sptech/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/src/main/java/school/sptech/model/Municipio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/src/main/java/school/sptech/service/ExcelBasico.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_bd/src/main/resources/log4j2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/dependency-reduced-pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/src/main/java/school/sptech/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/src/main/java/school/sptech/config/S3Config.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jar_s3/src/main/java/school/sptech/service/S3Service.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="3DDw55OH0ppgD20UuQXxyup8Pnd" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/andre/Documentos/JAR/pom.xml",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="school.sptech.Main" />
+      <module name="easydata" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="school.sptech.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c9df14ff-5c9b-47cb-a002-eafd396f36b5" name="Changes" comment="" />
+      <created>1777829762065</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777829762065</updated>
+    </task>
+    <servers />
+  </component>
+</project>
